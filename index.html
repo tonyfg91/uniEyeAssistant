@@ -35,8 +35,15 @@
 <script>
 // Funzione per estrarre la data dal nome del file
 function getDateFromFilename(filename) {
-    const match = filename.match(/(\d{4}\d{2}\d{2})/);
-    return match ? match[1] : "";
+    // Match YYYYMMDD
+    const match = filename.match(/(\d{4})(\d{2})(\d{2})_/);
+    if (!match) return "";
+
+    const year = match[1];
+    const month = match[2];
+    const day = match[3];
+	
+	return `${year}-${month}-${day}`;
 }
 
 // Funzione per mostrare la galleria
@@ -91,6 +98,7 @@ fetch(myJson)
 </script>
 </body>
 </html>
+
 
 
 
