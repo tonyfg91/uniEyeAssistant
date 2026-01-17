@@ -15,7 +15,7 @@
     <!-- Filtro per giorno -->
     <label for="dateFilter">Filtra per giorno:</label>
     <input type="date" id="dateFilter">
-
+	
     <div id="gallery"></div>
 </div>
 <script>
@@ -28,6 +28,11 @@
   const userPass = prompt("Inserisci password:");
   if (CryptoJS.MD5(userPass).toString() === hash) {
 	document.getElementById("content").style.display = "block";
+	// Data di oggi in formato YYYY-MM-DD
+	const today = new Date().toISOString().split("T")[0];
+	const dateInput = document.getElementById("dateFilter");
+	// Imposta il valore
+	dateInput.value = today;
   } else {
     document.body.innerHTML = "<h2>Accesso negato</h2>";
   }
@@ -98,6 +103,7 @@ fetch(myJson)
 </script>
 </body>
 </html>
+
 
 
 
