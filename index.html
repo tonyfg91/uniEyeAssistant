@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ESP32-CAM Gallery</title>
+  <style>
+    body { font-family: sans-serif; }
+    #content { display: none; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+<div id="content">
+    <h1>ESP32-CAM Images</h1>
+
+    {% for img in images %}
+        <div>
+            <img src="/uploads/{{ img }}">
+            <p>{{ img }}</p>
+        </div>
+    {% endfor %}
+</div>
+<script>
+  const hash = "fa44835d0ed33e8aa3b6b8964ec77bfd";
+
+	function md5(str) {
+		return CryptoJS.MD5(str).toString();
+	}
+
+  const userPass = prompt("Inserisci password:");
+  if (CryptoJS.MD5(userPass).toString() === hash) {
+	document.getElementById("content").style.display = "block";
+  } else {
+    document.body.innerHTML = "<h2>Accesso negato</h2>";
+  }
+</script>
+
+</body>
+</html>
+
+<!--
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32-CAM Gallery</title>
+    <style>
+        body { font-family: sans-serif; }
+        img { max-width: 100%; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>ESP32-CAM Images</h1>
+
+    {% for img in images %}
+        <div>
+            <img src="/uploads/{{ img }}">
+            <p>{{ img }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>-->
