@@ -65,8 +65,43 @@ function renderGallery(images, filterDate = "") {
         gallery.innerHTML = "<p>Nessuna immagine trovata per questa data.</p>";
         return;
     }
+	
+filteredImages.forEach(img => {
+    const div = document.createElement("div");
+    div.style.marginBottom = "20px";
+    div.style.overflow = "hidden";
 
-    filteredImages.forEach(img => {
+    const link = document.createElement("a");
+    link.href = img;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+
+    const imageElement = document.createElement("img");
+    imageElement.src = img;
+    imageElement.style.maxWidth = "300px";
+    imageElement.style.display = "block";
+    imageElement.style.transition = "transform 0.3s ease";
+    imageElement.style.cursor = "zoom-in";
+
+    // Effetto zoom on hover
+    imageElement.addEventListener("mouseenter", () => {
+        imageElement.style.transform = "scale(1.15)";
+    });
+
+    imageElement.addEventListener("mouseleave", () => {
+        imageElement.style.transform = "scale(1)";
+    });
+
+    const caption = document.createElement("p");
+    caption.textContent = img.split("/").pop();
+
+    link.appendChild(imageElement);
+    div.appendChild(link);
+    div.appendChild(caption);
+    gallery.appendChild(div);
+});
+
+    /*filteredImages.forEach(img => {
         const div = document.createElement("div");
         div.style.marginBottom = "20px";
 
@@ -81,7 +116,7 @@ function renderGallery(images, filterDate = "") {
         div.appendChild(imageElement);
         div.appendChild(caption);
         gallery.appendChild(div);
-    });
+    });*/
 }
 
 // Carica il JSON con tutte le immagini
@@ -103,6 +138,7 @@ fetch(myJson)
 </script>
 </body>
 </html>
+
 
 
 
