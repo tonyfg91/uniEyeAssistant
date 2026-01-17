@@ -12,13 +12,11 @@
 <body>
 <div id="content">
     <h1>ESP32-CAM Images</h1>
+    <!-- Filtro per giorno -->
+    <label for="dateFilter">Filtra per giorno:</label>
+    <input type="date" id="dateFilter">
 
-    {% for img in images %}
-        <div>
-            <img src="/uploads/{{ img }}">
-            <p>{{ img }}</p>
-        </div>
-    {% endfor %}
+    <div id="gallery"></div>
 </div>
 <script>
   const hash = "fa44835d0ed33e8aa3b6b8964ec77bfd";
@@ -34,7 +32,62 @@
     document.body.innerHTML = "<h2>Accesso negato</h2>";
   }
 </script>
+<script>
+// Funzione per estrarre la data dal nome del file
+function getDateFromFilename(filename) {
+    const match = filename.match(/(\d{4}-\d{2}-\d{2})/);
+    return match ? match[1] : "";
+}
 
+// Funzione per mostrare la galleria
+function renderGallery(images, filterDate = "") {
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    const filteredImages = images.filter(img => {
+        if (!filterDate) return true;
+        return getDateFromFilename(img) === filterDate;
+    });
+
+    if (filteredImages.length === 0) {
+        gallery.innerHTML = "<p>Nessuna immagine trovata per questa data.</p>";
+        return;
+    }
+
+    filteredImages.forEach(img => {
+        const div = document.createElement("div");
+        div.style.marginBottom = "20px";
+
+        const imageElement = document.createElement("img");
+        imageElement.src = img;
+        imageElement.style.maxWidth = "300px";
+        imageElement.style.display = "block";
+
+        const caption = document.createElement("p");
+        caption.textContent = img.split("/").pop();
+
+        div.appendChild(imageElement);
+        div.appendChild(caption);
+        gallery.appendChild(div);
+    });
+}
+
+// Carica il JSON con tutte le immagini
+fetch("/uploads/images.json")
+    .then(response => response.json())
+    .then(images => {
+        renderGallery(images);
+
+        // Aggiorna la galleria al cambio di data
+        document.getElementById("dateFilter").addEventListener("change", (e) => {
+            renderGallery(images, e.target.value);
+        });
+    })
+    .catch(err => {
+        console.error("Errore caricamento immagini:", err);
+        document.getElementById("gallery").innerHTML = "<p>Impossibile caricare le immagini.</p>";
+    });
+</script>
 </body>
 </html>
 
@@ -59,4 +112,6 @@
         </div>
     {% endfor %}
 </body>
+
 </html>-->
+
