@@ -73,7 +73,8 @@ function renderGallery(images, filterDate = "") {
 }
 
 // Carica il JSON con tutte le immagini
-fetch("images.json")
+var myJson = 'images.json?nocache=' + (new Date()).getTime();
+fetch(myJson)
     .then(response => response.json())
     .then(images => {
         renderGallery(images);
@@ -90,6 +91,7 @@ fetch("images.json")
 </script>
 </body>
 </html>
+
 
 
 
