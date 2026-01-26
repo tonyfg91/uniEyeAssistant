@@ -126,7 +126,8 @@ var myJson = 'images.json?nocache=' + (new Date()).getTime();
 fetch(myJson)
     .then(response => response.json())
     .then(images => {
-        renderGallery(images);
+        
+		renderGallery(images, document.getElementById("dateFilter").value);
 
         // Aggiorna la galleria al cambio di data
         document.getElementById("dateFilter").addEventListener("change", (e) => {
