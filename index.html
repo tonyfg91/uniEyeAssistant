@@ -63,6 +63,11 @@ function saveAuth() {
 	function md5(str) {
 		return CryptoJS.MD5(str).toString();
 	}
+if (loadAuth()) {
+  alreadyLogged = true;     // mostra la galleria direttamente
+  } else {
+    alreadyLogged = false;      // mostra form password
+  }
 if(alreadyLogged==false){
   const userPass = prompt("Inserisci password:");
   if (CryptoJS.MD5(userPass).toString() === hash) {
@@ -193,6 +198,7 @@ fetch(myJson)
 </div>
 </body>
 </html>
+
 
 
 
