@@ -20,15 +20,60 @@
     <div id="gallery"></div>
 </div>
 <script>
-  const hash = "fa44835d0ed33e8aa3b6b8964ec77bfd";
+	let alreadyLogged = false;
+function loadAuth() {
+  try {
+    const raw = localStorage.getItem(AUTH_KEY);
+    if (!raw) return false;
 
+    const payload = JSON.parse(raw);
+    if (!payload.ok) return false;
+
+    if (typeof payload.exp === "number" && Date.now() > payload.exp) {
+      localStorage.removeItem(AUTH_KEY);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    localStorage.removeItem(AUTH_KEY);
+    return false;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (loadAuth()) {
+  alreadyLogged = true;     // mostra la galleria direttamente
+  } else {
+    alreadyLogged = false;      // mostra form password
+  }
+});
+	
+	
+	const AUTH_KEY = "gallery_auth_v1";
+const AUTH_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 giorni
+
+function saveAuth() {
+  const payload = {
+    ok: true,
+    exp: Date.now() + AUTH_TTL_MS
+  };
+  localStorage.setItem(AUTH_KEY, JSON.stringify(payload));
+}
+  const hash = "fa44835d0ed33e8aa3b6b8964ec77bfd";
 	function md5(str) {
 		return CryptoJS.MD5(str).toString();
 	}
-
+if (loadAuth()) {
+  alreadyLogged = true;     // mostra la galleria direttamente
+  } else {
+    alreadyLogged = false;      // mostra form password
+  }
+if(alreadyLogged==false){
   const userPass = prompt("Inserisci password:");
   if (CryptoJS.MD5(userPass).toString() === hash) {
 	document.getElementById("content").style.display = "block";
+	  //creo token per non rifare login
+	  saveAuth()
 	// Data di oggi in formato YYYY-MM-DD
 	const today = new Date().toISOString().split("T")[0];
 	const dateInput = document.getElementById("dateFilter");
@@ -37,6 +82,14 @@
   } else {
     document.body.innerHTML = "<h2>Accesso negato</h2>";
   }
+}else{
+	document.getElementById("content").style.display = "block";
+	 // Data di oggi in formato YYYY-MM-DD
+	const today = new Date().toISOString().split("T")[0];
+	const dateInput = document.getElementById("dateFilter");
+	// Imposta il valore
+	dateInput.value = today;
+}
 </script>
 <script>
 // Funzione per estrarre la data dal nome del file
@@ -145,6 +198,8 @@ fetch(myJson)
 </div>
 </body>
 </html>
+
+
 
 
 
